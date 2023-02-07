@@ -1,4 +1,8 @@
+import 'dart:js_util';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:tapshyrma08_flutter/components/alert_dialog.dart';
 import 'package:tapshyrma08_flutter/components/slider.dart';
 import 'package:tapshyrma08_flutter/constants/app_colors.dart';
 import 'package:tapshyrma08_flutter/constants/app_text.dart';
@@ -13,7 +17,10 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeView extends State<HomeView> {
-  double _currentSliderValue = 180;
+  bool isfemalehome = false;
+  double height = 180;
+  int weight = 60;
+  int age = 28;
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +40,25 @@ class _HomeView extends State<HomeView> {
               child: Row(
                 children: [
                   StatusCard(
+                    onTap: () {
+                      setState(() {
+                        isfemalehome = false;
+                      });
+                    },
                     icon: Icons.male,
                     text: AppText.male,
+                    isFemale: !isfemalehome,
                   ),
                   SizedBox(width: 10.0),
                   StatusCard(
+                    onTap: () {
+                      setState(() {
+                        isfemalehome = true;
+                      });
+                    },
                     icon: Icons.female,
                     text: AppText.female,
+                    isFemale: isfemalehome,
                   ),
                 ],
               ),
@@ -51,11 +70,11 @@ class _HomeView extends State<HomeView> {
                 ),
                 color: AppColors.cardBgColor,
                 child: SliderWidget(
-                  height: _currentSliderValue.toStringAsFixed(0),
-                  value: _currentSliderValue,
+                  height: height.toStringAsFixed(0),
+                  value: height,
                   onChanged: (double value) {
                     setState(() {
-                      _currentSliderValue = value;
+                      height = value;
                     });
                   },
                 ),
@@ -66,17 +85,60 @@ class _HomeView extends State<HomeView> {
                 children: [
                   WeightAge(
                     text: AppText.weight,
-                    text2: "60",
+                    value: weight,
+                    remove: (svalue) {
+                      setState(() {});
+                      weight = svalue;
+                    },
+                    add: (svalue) {
+                      setState(() {});
+                      weight = svalue;
+                    },
                   ),
                   SizedBox(width: 10),
-                  WeightAge(text: AppText.age, text2: "28"),
+                  WeightAge(
+                    text: AppText.age,
+                    value: age,
+                    remove: (svalue) {
+                      setState(() {});
+                      age = svalue;
+                    },
+                    add: (svalue) {
+                      setState(() {});
+                      age = svalue;
+                    },
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: CalculatorBtn(),
+      bottomNavigationBar: CalculatorBtn(
+        onTap: () {
+          final result = weight / pow(height / 100, 2);
+          if (result < 18.5) {
+            showMyDialog(
+                context: context, text: "Сенин салмагын аз экен. Кобуроок же");
+          } else if (result >= 18.5 && result <= 24.9) {
+            showMyDialog(
+              context: context,
+              text: 'Сенин салмагын жакшы. Молодец.',
+            );
+          } else if (result > 24.9) {
+            showMyDialog(
+              context: context,
+              text:
+                  'Сенде ашыкча салмак коп. Озуно жакшы кара. Спорт менен алектен',
+            );
+          } else {
+            showMyDialog(
+              context: context,
+              text: 'Маалымат алууда катачылыктар бар',
+            );
+          }
+        },
+      ),
     );
   }
 }

@@ -6,12 +6,15 @@ import '../constants/app_text.dart';
 class CalculatorBtn extends StatelessWidget {
   const CalculatorBtn({
     Key? key,
+    required this.onTap,
   }) : super(key: key);
+
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         width: double.infinity,
         height: 70.0,

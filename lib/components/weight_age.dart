@@ -6,11 +6,15 @@ class WeightAge extends StatelessWidget {
   const WeightAge({
     Key? key,
     required this.text,
-    required this.text2,
+    required this.value,
+    required this.remove,
+    required this.add,
   }) : super(key: key);
 
   final String text;
-  final String text2;
+  final int value;
+  final void Function(int) remove;
+  final void Function(int) add;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class WeightAge extends StatelessWidget {
               ),
             ),
             Text(
-              text2,
+              "$value",
               style: TextStyle(
                 color: AppColors.white,
                 fontSize: 50.0,
@@ -41,23 +45,43 @@ class WeightAge extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FloatingActionButton(
-                  backgroundColor: AppColors.btnColor,
-                  foregroundColor: AppColors.white,
-                  onPressed: () {},
-                  child: Icon(Icons.remove, size: 50.0),
+                FlatButton(
+                  onPressed: () => remove(value - 1),
+                  icon: Icons.remove,
                 ),
                 SizedBox(width: 10.0),
-                FloatingActionButton(
-                  backgroundColor: AppColors.btnColor,
-                  foregroundColor: AppColors.white,
-                  onPressed: () {},
-                  child: Icon(Icons.add, size: 50.0),
+                FlatButton(
+                  onPressed: () => add(value + 1),
+                  icon: Icons.add,
                 ),
               ],
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class FlatButton extends StatelessWidget {
+  const FlatButton({
+    super.key,
+    required this.onPressed,
+    required this.icon,
+  });
+
+  final void Function()? onPressed;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: AppColors.btnColor,
+      foregroundColor: AppColors.white,
+      onPressed: onPressed,
+      child: Icon(
+        icon,
+        size: 50.0,
       ),
     );
   }
